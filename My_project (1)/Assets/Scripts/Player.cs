@@ -44,9 +44,9 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        if ((isTouchRight && h == 1) || (isTouchLeft && h == -1))
-            h = 0;
+        float v = Input.GetAxisRaw("Horizontal");
+        if ((isTouchRight && v == 1) || (isTouchLeft && v == -1))
+            v = 0;
         float v = Input.GetAxisRaw("Vertical");
         if ((isTouchTop && v == 1) || (isTouchBottom && v == -1))
             v = 0;
