@@ -2050,9 +2050,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyObjs:
-  - {fileID: 3025270503383082063, guid: 6d442aa560866bc4fbbba71ade7525cd, type: 3}
-  - {fileID: 9113045823416220846, guid: b3352eda4ccf4e74cbd978e0503dab0c, type: 3}
-  - {fileID: 9212249265083345910, guid: 3d79ce32078d46b4a9681757b95aec4f, type: 3}
+  - 
+  - 
+  - 
   spawnPoints:
   - {fileID: 674666275}
   - {fileID: 31659785}
@@ -2063,7 +2063,7 @@ MonoBehaviour:
   - {fileID: 465004568}
   - {fileID: 402993722}
   - {fileID: 1256307724}
-  maxSpawnDelay: 2
+  nextSpawnDelay: 0
   curSpawnDelay: 0
   player: {fileID: 1383401657}
   scoreText: {fileID: 453121180}
@@ -2076,6 +2076,9 @@ MonoBehaviour:
   - {fileID: 1498874434}
   - {fileID: 1754936691}
   gameOverSet: {fileID: 1420561670}
+  objectManager: {fileID: 1134080412}
+  spawnIndex: 0
+  spawnEnd: 0
 --- !u!4 &1184907070
 Transform:
   m_ObjectHideFlags: 0
@@ -2510,16 +2513,17 @@ MonoBehaviour:
   isTouchRight: 0
   score: 0
   life: 3
-  power: 3
+  power: 1
   maxPower: 3
   boom: 0
   maxBoom: 3
-  maxShotDealy: 0.1
+  maxShotDealy: 0.15
   curShotDelay: 0
   bulletObjA: {fileID: 4268243171143268273, guid: 32ae2923acdbb6c4f9303e3621ec3231, type: 3}
   bulletObjB: {fileID: 5181535388564577096, guid: 43da36254f803964bbe61c4c1d79f4cc, type: 3}
   boomEffect: {fileID: 1223890466}
-  manager: {fileID: 1184907069}
+  gameManager: {fileID: 1184907069}
+  objectManager: {fileID: 1134080412}
   isHit: 0
   isBoomTime: 0
 --- !u!212 &1383401661
@@ -2581,7 +2585,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1383401657}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

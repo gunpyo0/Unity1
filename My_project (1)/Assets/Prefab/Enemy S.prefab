@@ -130,6 +130,8 @@ MonoBehaviour:
   itemPower: {fileID: 6690547195325645077, guid: a70a1e0857faf554d9506c000703cb99, type: 3}
   itemBoom: {fileID: 7112075452342915702, guid: e7552272eda3713488f9deb1a8b2ca59, type: 3}
   player: {fileID: 0}
+  objectManager: {fileID: 0}
+  type: 
 --- !u!50 &3025270503383082056
 Rigidbody2D:
   serializedVersion: 4

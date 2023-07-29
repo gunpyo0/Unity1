@@ -28,6 +28,8 @@ public class ObjectManager : MonoBehaviour
     GameObject[] bulletEnemyA;
     GameObject[] bulletEnemyB;
 
+    GameObject[] targetPool;
+
     private void Awake()
     {
         enemyL = new GameObject[10];
@@ -94,7 +96,7 @@ public class ObjectManager : MonoBehaviour
 
         for (int i = 0; i < bulletEnemyA.Length; i++)
         {
-            bulletEnemyA[i] = Instantiate(enemyLPrefab);
+            bulletEnemyA[i] = Instantiate(bulletEnemyAPrefab);
             bulletEnemyA[i].SetActive(false);
         }
            
@@ -104,5 +106,95 @@ public class ObjectManager : MonoBehaviour
             bulletEnemyB[i].SetActive(false);
         }
 
+    }
+
+    public GameObject MakeObj(string type)
+    {
+        
+
+        switch (type)
+        {
+            case "EnemyL":
+                targetPool = enemyL;
+                break;
+            case "EnemyM":
+                targetPool = enemyM;
+                break;
+            case "EnemyS":
+                targetPool = enemyS;
+                break;
+            case "ItemCoin":
+                targetPool = itemCoin;
+                break;
+            case "ItemPower":
+                targetPool = itemPower;
+                break;
+            case "ItemBoom":
+                targetPool = itemBoom;
+                break;
+            case "BulletPlayerA":
+                targetPool = bulletPlayerA;
+                break;
+            case "BulletPlayerB":
+                targetPool = bulletPlayerB;
+                break;
+            case "BulletEnemyA":
+                targetPool = bulletEnemyA;
+                break;
+            case "BulletEnemyB":
+                targetPool = bulletEnemyB;
+                break;
+
+        }
+        for (int i = 0; i < targetPool.Length; i++)
+        {
+            if (!targetPool[i].activeSelf)
+            {
+                targetPool[i].SetActive(true);
+                return targetPool[i];
+            }
+        }
+
+        return null;
+    }
+
+    public GameObject[] GetPool(string type)
+    {
+        switch (type)
+        {
+            case "EnemyL":
+                targetPool = enemyL;
+                break;
+            case "EnemyM":
+                targetPool = enemyM;
+                break;
+            case "EnemyS":
+                targetPool = enemyS;
+                break;
+            case "ItemCoin":
+                targetPool = itemCoin;
+                break;
+            case "ItemPower":
+                targetPool = itemPower;
+                break;
+            case "ItemBoom":
+                targetPool = itemBoom;
+                break;
+            case "BulletPlayerA":
+                targetPool = bulletPlayerA;
+                break;
+            case "BulletPlayerB":
+                targetPool = bulletPlayerB;
+                break;
+            case "BulletEnemyA":
+                targetPool = bulletEnemyA;
+                break;
+            case "BulletEnemyB":
+                targetPool = bulletEnemyB;
+                break;
+
+        }
+
+        return targetPool;
     }
 }

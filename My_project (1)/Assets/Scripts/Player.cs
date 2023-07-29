@@ -24,7 +24,8 @@ public class Player : MonoBehaviour
     public GameObject bulletObjB;
     public GameObject boomEffect;
 
-    public GameManager manager;
+    public GameManager gameManager;
+    public ObjectManager objectManager;
     public bool isHit;
     public bool isBoomTime;
 
@@ -44,9 +45,9 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        float v = Input.GetAxisRaw("Horizontal");
-        if ((isTouchRight && v == 1) || (isTouchLeft && v == -1))
-            v = 0;
+        float h = Input.GetAxisRaw("Horizontal");
+        if ((isTouchRight && h == 1) || (isTouchLeft && h == -1))
+            h = 0;
         float v = Input.GetAxisRaw("Vertical");
         if ((isTouchTop && v == 1) || (isTouchBottom && v == -1))
             v = 0;
@@ -71,13 +72,17 @@ public class Player : MonoBehaviour
         switch (power)
         {
             case 1:
-                GameObject bullet = Instantiate(bulletObjA, transform.position, transform.rotation);
+                GameObject bullet = objectManager.MakeObj("BulletPlayerA");
+                bullet.transform.position = transform.position;
+
                 Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
                 rigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 2:
-                GameObject bulletR = Instantiate(bulletObjA, transform.position + Vector3.right * 0.1f, transform.rotation);
-                GameObject bulletL = Instantiate(bulletObjA, transform.position + Vector3.left * 0.1f, transform.rotation);
+                GameObject bulletR = objectManager.MakeObj("BulletPlayerA");
+                bulletR.transform.position = transform.position + Vector3.right * 0.1f;
+                GameObject bulletL = objectManager.MakeObj("BulletPlayerA");
+                bulletL.transform.position = transform.position + Vector3.left * 0.1f;
                 Rigidbody2D rigidR = bulletR.GetComponent<Rigidbody2D>();
                 Rigidbody2D rigidL = bulletL.GetComponent<Rigidbody2D>();
                 rigidR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
@@ -85,9 +90,15 @@ public class Player : MonoBehaviour
 
                 break;
             case 3:
-                GameObject bulletRR = Instantiate(bulletObjA, transform.position + Vector3.right * 0.2f, transform.rotation);
-                GameObject bulletCC = Instantiate(bulletObjB, transform.position, transform.rotation);
-                GameObject bulletLL = Instantiate(bulletObjA, transform.position + Vector3.left * 0.2f, transform.rotation);
+                GameObject bulletRR = objectManager.MakeObj("BulletPlayerA");
+                bulletRR.transform.position = transform.position + Vector3.right * 0.1f; 
+                
+                GameObject bulletCC = objectManager.MakeObj("BulletPlayerB");
+                bulletCC.transform.position = transform.position;
+                
+                GameObject bulletLL = objectManager.MakeObj("BulletPlayerA");
+                bulletLL.transform.position = transform.position + Vector3.left * 0.1f; 
+                
                 Rigidbody2D rigidRR = bulletRR.GetComponent<Rigidbody2D>();
                 Rigidbody2D rigidCC = bulletCC.GetComponent<Rigidbody2D>();
                 Rigidbody2D rigidLL = bulletLL.GetComponent<Rigidbody2D>();
@@ -118,25 +129,48 @@ public class Player : MonoBehaviour
 
         boom--;
         isBoomTime = true;
-        manager.UpdateBoomIcon(boom);
+        gameManager.UpdateBoomIcon(boom);
 
         //#1.Effect visible
         boomEffect.SetActive(true);
         Invoke("OffBoomEffect", 4f);
 
         //#2.Remove Enemy
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < enemies.Length; i++)
+        GameObject[] enemiesL = objectManager.GetPool("EnemyL");
+        GameObject[] enemiesM = objectManager.GetPool("EnemyM");
+        GameObject[] enemiesS = objectManager.GetPool("EnemyS");
+        for (int i = 0; i < enemiesL.Length; i++)
         {
-            Enemy enemyLogic = enemies[i].GetComponent<Enemy>();
+            Enemy enemyLogic = enemiesL[i].GetComponent<Enemy>();
+            enemyLogic.OnHit(1000);
+        }
+        for (int i = 0; i < enemiesM.Length; i++)
+        {
+            Enemy enemyLogic = enemiesM[i].GetComponent<Enemy>();
+            enemyLogic.OnHit(1000);
+        }
+        for (int i = 0; i < enemiesS.Length; i++)
+        {
+            Enemy enemyLogic = enemiesS[i].GetComponent<Enemy>();
             enemyLogic.OnHit(1000);
         }
 
         //#3.Remove Enemy Bullet
-        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < bullets.Length; i++)
+        GameObject[] bulletsA = objectManager.GetPool("Enemy");
+        GameObject[] bulletsB = objectManager.GetPool("Enemy");
+        for (int i = 0; i < bulletsA.Length; i++)
         {
-            Destroy(bullets[i]);
+            if (bulletsA[i].activeSelf)
+            {
+                bulletsA[i].SetActive(false);
+            }
+        }
+        for (int i = 0; i < enemiesS.Length; i++)
+        {
+            if (bulletsB[i].activeSelf)
+            {
+                bulletsB[i].SetActive(false);
+            }
         }
 
     }
@@ -171,18 +205,18 @@ public class Player : MonoBehaviour
                 return;
             isHit = true;
             life--;
-            manager.UpdateLifeIcon(life);
+            gameManager.UpdateLifeIcon(life);
 
             if (life == 0)
             {
-                manager.GameOver();
+                gameManager.GameOver();
             }
             else
             {
-                manager.RespawnPlayer();
+                gameManager.RespawnPlayer();
             }
             gameObject.SetActive(false);
-            Destroy(collision.gameObject);
+            collision.gameObject.SetActive(false);
         }
         else if (collision.gameObject.tag == "Item") {
             Item item = collision.gameObject.GetComponent<Item>();
@@ -202,11 +236,11 @@ public class Player : MonoBehaviour
                         score += 500;
                     else
                         boom++;
-                    manager.UpdateBoomIcon(boom);
+                    gameManager.UpdateBoomIcon(boom);
                     break;
 
             }
-            Destroy(collision.gameObject);
+            collision.gameObject.SetActive(false);
         }
     }
 
